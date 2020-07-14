@@ -1,22 +1,11 @@
-jQuery( document ).ready(function() {
-    jQuery("i.fa.fa-bars").click(function(){
-        jQuery("#mobile_menu").toggle();
-    });
-});
-
-
-jQuery(window).resize(function(){
-    if ($(window).width() <= 767) {  
-        jQuery("#mobile_menu").css("display", "none");				
-    }     
-});
-
+// Check Body Class if User is logged in
 var status = document.body.classList.contains( 'logged-in' );
-if(status == 'true'){
+
+if(status == 'true'){    // If Logged In then
     jQuery('.menu-main ul li:last-child a').text("profile");
     jQuery('.menu-main ul li:last-child a').attr("href", "http://thebackstopgroup.perfectwebsolutions.info/profile/");
 }
-else{
+else{                   // If user is not Logged In Then
     jQuery('.menu-main ul li:last-child a').text("sign up");
     jQuery('.menu-main ul li:last-child a').attr("href", "http://thebackstopgroup.perfectwebsolutions.info/sign-up/");
 }
