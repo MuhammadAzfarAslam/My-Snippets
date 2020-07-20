@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Change Text</title>
+    <script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+    <span id="sp"></span>
+</body>
+</html>
+
+<script>
+var texts = new Array();
+texts.push("PSD TO WORDPRESS WEB DEVELOPMENT");
+texts.push("THEME CUSTOMIZATION");
+texts.push("PLUGINS DEVELOPMENT");
+texts.push("SEARCH ENGINE OPTIMIZATION");
+texts.push("HTML TO WORDPRESS");
+texts.push("WORDPRESS THEME DEVELOPMENT");
+
+var point = 0;
+
+function changeText(){
+  jQuery('span#sp').html(texts[point]);
+  if(point < ( texts.length - 1 ) ){
+    point++;
+  }else{
+    point = 0;
+  }
+  
+}
+ 
+setInterval(changeText, 3000); /*Call it here*/
+changeText();
+</script>
