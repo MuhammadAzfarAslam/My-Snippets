@@ -1,0 +1,169 @@
+<!-- <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script> -->
+<script
+  async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBC8NBfAppEj9cHuLaGNEXmFNj11W8os-Q&callback=initMap"
+  type="text/javascript"
+></script>
+
+<script>
+  let latlong = [];
+  jQuery(window).load(function () {
+    // Fetching all User Address
+    let html;
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer agency-347676be-16c9-413f-ba7e-28c831d901ca"
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch("https://rest.gohighlevel.com/v1/locations/", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        let loc = result.locations;
+        console.log(loc);
+        let card = "";
+        let locObject = [];
+        let address, city, state, name;
+        for (let i = 0; i < loc.length - 1; i++) {
+          address = loc[i].address;
+          city =
+            loc[i].city != "" || typeof loc[i].city !== undefined
+              ? loc[i].city
+              : null;
+          state =
+            loc[i].state != "" || typeof loc[i].state !== undefined
+              ? loc[i].state
+              : null;
+          name = loc[i].name;
+          phone = loc[i].phone;
+          website = loc[i].website;
+          html += `<option value="${city}">${name}, ${address}, ${city}, ${state}</option>`;
+          locObject.push({
+            city: city,
+            state: state,
+            address: address,
+            name: name,
+            phone: phone,
+            website: website,
+          });
+        }
+        jQuery("#browser").change(function () {
+          let selectedCity = jQuery(this).val();
+          if (selectedCity != "" || selectedCity != null) {
+            let items = locObject.filter((item) => item.city === selectedCity);
+            console.log("items are = ");
+            console.log(items);
+            let marker_count = 1;
+            card='';
+            jQuery.each(items, function (index, val) {
+              let adrss = val.address + val.city + val.state;
+              if (
+                typeof val !== "undefined" ) {
+                card += `
+                <div class="card">
+                    <div class="heading">
+                        <h2>${val.name}</h2>
+                    </div>
+                    <div class="body">
+                        <p class="address">${adrss}</p>
+                        <div class="detail">
+                        <p class="phone">${val.phone}</p>
+                        <a href="#" class="book">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+                `;
+              }
+              geolocation(adrss, marker_count);
+              marker_count++;
+            });
+            console.log("latlong is = ");
+            console.log(latlong);
+
+            setTimeout(() => {
+              console.log("before initMap");
+              jQuery(".cardx-row").empty().append(card);
+              //   var e = jQuery.Event("keypress");
+              //   e.which = 13; // Character 'Space'
+              //   jQuery("#browser").trigger(e);
+              initMap();
+            }, 1000);
+          }
+        });
+        jQuery("#browsers").append(html);
+      })
+      .catch((error) => console.log("error", error));
+  });
+
+  let latitude;
+  let longitude;
+  // Converting address string into Longitude and Latitude
+  function geolocation(adr, index) {
+    latlong = [];
+    var geocoder = new google.maps.Geocoder();
+    var address = adr;
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        latitude = results[0].geometry.location.lat();
+        longitude = results[0].geometry.location.lng();
+        latlong.push([adr, latitude, longitude, index]);
+        //return [latitude,longitude];
+      }
+    });
+  }
+
+  //   Showing Markers
+  function initMap() {
+    var locations = latlong;
+    console.log("locations are ");
+    console.log(locations);
+    var map = new google.maps.Map(document.getElementById("maptesting"), {
+      //   zoom: 10,
+      //   center: new google.maps.LatLng(40.7128, -74.2598655),
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+    //create empty LatLngBounds object
+    var bounds = new google.maps.LatLngBounds();
+    var infowindow = new google.maps.InfoWindow();
+
+    for (i = 0; i < locations.length; i++) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map,
+      });
+
+      //extend the bounds to include each marker's position
+      bounds.extend(marker.position);
+
+      google.maps.event.addListener(
+        marker,
+        "click",
+        (function (marker, i) {
+          return function () {
+            infowindow.setContent(locations[i][0]);
+            infowindow.open(map, marker);
+          };
+        })(marker, i)
+      );
+    }
+
+    //now fit the map to the newly inclusive bounds
+    map.fitBounds(bounds);
+
+    //(optional) restore the zoom level after the map is done scaling
+    var listener = google.maps.event.addListener(map, "idle", function () {
+      map.setZoom(10);
+      google.maps.event.removeListener(listener);
+    });
+  }
+</script>
