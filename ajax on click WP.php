@@ -143,7 +143,7 @@ function zoom_function()
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => "GET",
       CURLOPT_HTTPHEADER => array(
-        "authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IllISXpiY1hjVGppbjlBTWU0NjR4YmciLCJleHAiOjE2NTUxOTc2ODAsImlhdCI6MTYyMzY1NjM0N30.u3N-ldYyGK2L47BBQLox9Ssm0BtqQw0RmBr2G3s-_PU",
+        "authorization: Bearer aaa_Place_Token_Here_aaa",
         "content-type: application/json"
       ),
     ));

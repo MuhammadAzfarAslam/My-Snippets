@@ -1,10 +1,14 @@
 <!-- <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script> -->
 <script
   async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBC8NBfAppEj9cHuLaGNEXmFNj11W8os-Q&callback=initMap"
+  src="https://maps.googleapis.com/maps/api/js?key=###_add_api_key_here_###&callback=initMap"
   type="text/javascript"
 ></script>
+<!-- 
 
+  Place Api key in JS Script URL
+
+ -->
 <script>
   let latlong = [];
   jQuery(window).load(function () {
@@ -13,7 +17,7 @@
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer agency-347676be-16c9-413f-ba7e-28c831d901ca"
+      "Bearer ###_Add_Token_Here_####"
     );
 
     var requestOptions = {
